@@ -1,0 +1,122 @@
+// netlify/functions/stripe-webhook.js
+//
+// Listens for Stripe events and keeps the `members` table in sync.
+// This is the ONLY place payment_status ever gets written — the
+// magic-link function just reads it.
+//
+// Membership is a single one-time $50 payment — no subscription
+// lifecycle to track. We only need two events:
+//   checkout.session.completed  → grants access
+//   charge.refunded             → revokes access automatically if
+//                                  Craig issues a refund from Stripe
+//
+// Stripe dashboard → Developers → Webhooks → Add endpoint:
+//   https://huebloc.com/.netlify/functions/stripe-webhook
+// Events to send: checkout.session.completed, charge.refunded
+//
+// Env vars required (Netlify → Site settings → Environment variables):
+//   STRIPE_SECRET_KEY       sk_live_... (or sk_test_... while testing)
+//   STRIPE_WEBHOOK_SECRET   whsec_...   (shown when you create the endpoint above)
+//   SUPABASE_URL            https://xxxx.supabase.co
+//   SUPABASE_SERVICE_ROLE_KEY  service_role secret (Project Settings → API)
+//
+// Dependencies (package.json):
+//   npm install stripe @supabase/supabase-js
+
+const Stripe = require('stripe');
+const { createClient } = require('@supabase/supabase-js');
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
+
+  // ---- 1. Verify this actually came from Stripe ----
+  let stripeEvent;
+  try {
+    const signature = event.headers['stripe-signature'];
+    stripeEvent = stripe.webhooks.constructEvent(
+      event.body, // must be the RAW body — see netlify.toml note at bottom
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    console.error('Webhook signature verification failed:', err.message);
+    return { statusCode: 400, body: `Webhook Error: ${err.message}` };
+  }
+
+  // ---- 2. Handle the events we care about ----
+  try {
+    switch (stripeEvent.type) {
+      case 'checkout.session.completed': {
+        const session = stripeEvent.data.object;
+        const email = (session.customer_details?.email || session.customer_email || '').toLowerCase();
+
+        if (!email) {
+          console.error('checkout.session.completed with no email on session', session.id);
+          break;
+        }
+
+        // Upsert on email: creates the member on first purchase,
+        // or updates them if they somehow already had a row.
+        const { error } = await supabase
+          .from('members')
+          .upsert(
+            {
+              email,
+              stripe_customer_id: session.customer,
+              stripe_payment_intent_id: session.payment_intent,
+              payment_status: 'active',
+            },
+            { onConflict: 'email' }
+          );
+
+        if (error) throw error;
+        break;
+      }
+
+      case 'charge.refunded': {
+        const charge = stripeEvent.data.object;
+        const paymentIntentId = charge.payment_intent;
+
+        if (!paymentIntentId) {
+          console.error('charge.refunded with no payment_intent on charge', charge.id);
+          break;
+        }
+
+        const { error } = await supabase
+          .from('members')
+          .update({ payment_status: 'refunded' })
+          .eq('stripe_payment_intent_id', paymentIntentId);
+
+        if (error) throw error;
+        break;
+      }
+
+      default:
+        // Ignore anything we didn't ask for.
+        break;
+    }
+  } catch (err) {
+    console.error('Error processing Stripe webhook:', err);
+    // Return 500 so Stripe retries this event automatically.
+    return { statusCode: 500, body: 'Internal error processing webhook' };
+  }
+
+  // ---- 3. Tell Stripe we got it ----
+  return { statusCode: 200, body: JSON.stringify({ received: true }) };
+};
+
+// IMPORTANT — raw body requirement:
+// stripe.webhooks.constructEvent needs the *unparsed* request body to
+// verify the signature. In netlify.toml, make sure this function isn't
+// passed through any body-parsing middleware. Netlify Functions give you
+// the raw string in `event.body` by default as long as you don't add a
+// bundler step that parses JSON before this handler runs — the standard
+// Netlify Functions setup (no framework in front) works out of the box.
