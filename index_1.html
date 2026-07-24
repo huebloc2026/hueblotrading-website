@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact — HUEBLOC Trading</title>
-<meta name="description" content="Get in touch with HUEBLOC Trading.">
+<title>HUEBLOC Trading — Discipline. Strategy. Growth.</title>
+<meta name="description" content="HUEBLOC Trading is a premium trading community built on strategy, discipline, and growth.">
 <link rel="icon" href="favicon.png" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -167,7 +167,10 @@
 
   /* ===================== HERO ===================== */
   .hero{
-    background:radial-gradient(120% 100% at 15% 0%, #131a35 0%, var(--deep) 55%, #070a16 100%);
+    background:
+      linear-gradient(180deg, rgba(11,16,32,.25) 0%, rgba(11,16,32,.45) 100%),
+      url('hero-warrior-columns.jpg') center 35% / cover no-repeat,
+      radial-gradient(120% 100% at 15% 0%, #131a35 0%, var(--deep) 55%, #070a16 100%);
     color:var(--paper);
     padding:290px 0 120px;
     overflow:hidden;
@@ -259,18 +262,21 @@
   .about-visual{
     aspect-ratio:4/5;
     border-radius:20px;
-    background:linear-gradient(160deg,var(--deep) 0%, var(--slate) 100%);
+    background:var(--surface-0);
+    border:1px solid var(--line);
     position:relative;overflow:hidden;
     display:flex;align-items:center;justify-content:center;
   }
   .about-visual::before{
-    content:"";position:absolute;inset:0;
-    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 2px, transparent 2px 40px);
+    content:"";
+    position:absolute;width:360px;height:360px;border-radius:50%;
+    background:radial-gradient(circle, rgba(139,92,246,.22), transparent 70%);
   }
-  .about-visual .cols{display:flex;gap:16px;position:relative;z-index:2;}
-  .about-visual .col{width:14px;height:180px;border-radius:4px;background:linear-gradient(180deg,#cfd4de,#8b93a3);}
-  .about-visual .col:nth-child(2){height:220px;}
-  .about-visual .col:nth-child(3){height:150px;}
+  .about-visual img{
+    position:relative;z-index:2;
+    width:76%;max-width:340px;
+    filter:drop-shadow(0 24px 40px rgba(11,16,32,.14));
+  }
   .about-eyebrow{color:var(--purple);}
   .about h2{font-size:clamp(28px,3.2vw,38px);margin:18px 0 22px;}
   .about p{font-size:16px;line-height:1.85;color:var(--ink-soft);margin-bottom:18px;max-width:560px;}
@@ -415,8 +421,7 @@
     nav.links.open{transform:translateY(0);opacity:1;pointer-events:auto;}
     .burger{display:block;}
     .brand img{height:72px;}
-    .hero{padding-top:190px;}
-    .page-hero{padding-top:180px;}
+    .hero{padding-top:190px;background-position:0 0, left 30%, 0 0;}
     .nav-actions .btn:first-child{display:none;}
     .about-features{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
@@ -425,10 +430,7 @@
 
   /* ===================== INTERIOR PAGE HERO ===================== */
   .page-hero{
-    background:
-      linear-gradient(180deg, rgba(11,16,32,.3) 0%, rgba(11,16,32,.5) 100%),
-      url('hero-warrior-columns.jpg') center 35% / cover no-repeat,
-      radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
+    background:radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
     color:var(--paper);
     padding:280px 0 90px;
     text-align:center;
@@ -518,207 +520,6 @@
     .faq-category-head h2{font-size:19px;}
   }
 
-  /* ===================== CLIENT AREA / AUTH ===================== */
-  .auth-section{background:var(--paper);padding:100px 0 130px;}
-  .auth-shell{max-width:920px;margin:0 auto;}
-  .auth-tabs{
-    display:flex;gap:8px;background:var(--surface-0);border:1px solid var(--line);
-    border-radius:12px;padding:6px;max-width:340px;margin:0 auto 50px;
-  }
-  .auth-tab{
-    flex:1;text-align:center;padding:12px 0;border-radius:8px;cursor:pointer;
-    font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
-    font-weight:700;color:var(--ink-soft);transition:.25s;border:none;background:none;
-  }
-  .auth-tab.active{background:#fff;color:var(--purple);box-shadow:0 6px 16px -8px rgba(139,92,246,.4);}
-
-  .auth-panel{display:none;}
-  .auth-panel.active{display:block;animation:fadeIn .4s ease;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
-
-  .auth-grid{display:grid;grid-template-columns:1fr .85fr;gap:50px;align-items:start;}
-
-  .plan-card{
-    background:linear-gradient(160deg,var(--deep) 0%, var(--slate) 100%);
-    border-radius:20px;padding:40px 36px;color:var(--paper);position:relative;overflow:hidden;
-  }
-  .plan-card::before{
-    content:"";position:absolute;inset:0;
-    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 2px, transparent 2px 40px);
-  }
-  .plan-card-inner{position:relative;z-index:2;}
-  .plan-card .tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;}
-  .plan-card h3{font-size:24px;margin:14px 0 6px;}
-  .plan-price{display:flex;align-items:baseline;gap:6px;margin-bottom:24px;}
-  .plan-price .amount{font-family:var(--font-display);font-size:40px;}
-  .plan-price .period{font-size:13px;color:rgba(242,239,255,.5);}
-  .plan-features{margin-bottom:0;}
-  .plan-features li{
-    display:flex;gap:10px;align-items:flex-start;font-size:14px;
-    color:rgba(242,239,255,.8);margin-bottom:14px;line-height:1.6;
-  }
-  .plan-features li::before{
-    content:"";flex:none;width:16px;height:16px;margin-top:2px;border-radius:50%;
-    background:var(--gradient);
-  }
-
-  .auth-form-card{
-    background:#fff;border:1px solid var(--line);border-radius:20px;padding:40px 36px;
-  }
-  .auth-form-card h3{font-size:19px;margin-bottom:8px;}
-  .auth-form-card > p{font-size:13.5px;color:var(--ink-soft);margin-bottom:26px;line-height:1.7;}
-  .field{margin-bottom:18px;}
-  .field label{
-    display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;
-    text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;
-  }
-  .field input{
-    width:100%;padding:14px 16px;border-radius:9px;border:1px solid var(--line);
-    font-family:var(--font-body);font-size:14.5px;color:var(--ink);background:var(--surface-0);
-    transition:border-color .2s ease, box-shadow .2s ease;
-  }
-  .field input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.15);}
-  .field select,
-  .field textarea{
-    width:100%;padding:14px 16px;border-radius:9px;border:1px solid var(--line);
-    font-family:var(--font-body);font-size:14.5px;color:var(--ink);background:var(--surface-0);
-    transition:border-color .2s ease, box-shadow .2s ease;
-  }
-  .field select:focus,
-  .field textarea:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.15);}
-  .field textarea{resize:vertical;min-height:130px;font-family:var(--font-body);}
-  .field select{cursor:pointer;}
-  .auth-submit{width:100%;justify-content:center;margin-top:6px;border:none;}
-  .auth-note{font-size:12px;color:var(--ink-soft);margin-top:16px;line-height:1.7;}
-  .auth-note a{color:var(--purple);text-decoration:underline;}
-  .auth-inline-note{
-    font-size:12.5px;color:var(--purple);margin-top:14px;display:none;
-    background:var(--surface-0);border-radius:8px;padding:10px 14px;
-  }
-  .auth-inline-note.show{display:block;}
-
-  .auth-success{display:none;text-align:center;padding:26px 10px 10px;}
-  .auth-success.active{display:block;}
-  .auth-success .icon{
-    width:56px;height:56px;border-radius:50%;background:var(--gradient);
-    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
-  }
-  .auth-success .icon svg{width:26px;height:26px;stroke:#fff;fill:none;}
-  .auth-success h3{font-size:19px;margin-bottom:10px;}
-  .auth-success p{font-size:14px;color:var(--ink-soft);line-height:1.7;}
-  .auth-success .email-echo{color:var(--purple);font-weight:700;}
-  .auth-form-body.hidden{display:none;}
-
-  .preview-link{text-align:center;margin-top:36px;font-size:13px;color:var(--ink-soft);}
-  .preview-link a{color:var(--purple);font-weight:700;text-decoration:underline;}
-
-  @media (max-width:860px){
-    .auth-grid{grid-template-columns:1fr;}
-  }
-
-  /* ===================== DASHBOARD (PREVIEW) ===================== */
-  .dash-banner{
-    background:var(--slate);color:var(--paper);text-align:center;
-    padding:13px 20px;font-family:var(--font-mono);font-size:12px;letter-spacing:.05em;
-    position:relative;z-index:200;
-  }
-  .dash-banner strong{color:var(--cyan);}
-  .dash-banner a{color:var(--paper);text-decoration:underline;margin-left:10px;}
-  .dash-topbar{
-    background:var(--paper);border-bottom:1px solid var(--line);
-    padding:16px 0;position:sticky;top:0;z-index:100;
-  }
-  .dash-topbar .wrap{display:flex;align-items:center;justify-content:space-between;}
-  .dash-topbar .brand img{height:32px;}
-  .dash-wrap{max-width:1180px;margin:0 auto;padding:50px 28px 100px;display:grid;grid-template-columns:230px 1fr;gap:50px;}
-  .dash-sidebar{position:sticky;top:90px;align-self:start;}
-  .dash-profile{display:flex;align-items:center;gap:12px;margin-bottom:30px;}
-  .dash-avatar{
-    width:42px;height:42px;border-radius:50%;background:var(--gradient);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-display);font-weight:700;flex:none;
-  }
-  .dash-profile .name{font-weight:700;font-size:13.5px;}
-  .dash-profile .email{font-size:11.5px;color:var(--ink-soft);}
-  .dash-nav-list a{
-    display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:9px;
-    font-size:13.5px;font-weight:600;color:var(--ink-soft);margin-bottom:4px;transition:.2s;
-  }
-  .dash-nav-list a svg{width:17px;height:17px;stroke:currentColor;fill:none;flex:none;}
-  .dash-nav-list a:hover{background:var(--surface-0);color:var(--ink);}
-  .dash-nav-list a.active{background:var(--surface-0);color:var(--purple);}
-  .dash-nav-list .divider-line{height:1px;background:var(--line);margin:14px 0;}
-  .dash-main h1{font-size:clamp(24px,3vw,30px);margin-bottom:6px;}
-  .dash-main > .sub{color:var(--ink-soft);font-size:14px;margin-bottom:38px;}
-
-  .dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:46px;}
-  .dash-stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;}
-  .dash-stat .label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;}
-  .dash-stat .value{font-family:var(--font-display);font-size:24px;margin-top:8px;}
-
-  .dash-section{margin-bottom:46px;}
-  .dash-section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-  .dash-section-head h2{font-size:17px;}
-  .dash-section-head span{font-size:12px;font-weight:600;color:var(--ink-soft);}
-
-  .module-list{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;}
-  .module-item{
-    display:flex;align-items:center;justify-content:space-between;gap:16px;
-    padding:16px 20px;border-bottom:1px solid var(--line);
-  }
-  .module-item:last-child{border-bottom:none;}
-  .module-left{display:flex;align-items:center;gap:14px;}
-  .module-num{
-    width:30px;height:30px;border-radius:8px;background:var(--surface-0);color:var(--purple);
-    display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11.5px;font-weight:700;flex:none;
-  }
-  .module-title{font-size:13.5px;font-weight:600;}
-  .module-meta{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
-  .module-status{font-size:10.5px;font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:20px;white-space:nowrap;}
-  .module-status.done{background:rgba(16,185,129,.12);color:var(--green);}
-  .module-status.progress{background:rgba(139,92,246,.12);color:var(--purple);}
-  .module-status.locked{background:rgba(30,41,59,.06);color:var(--ink-soft);}
-
-  .session-list{display:grid;gap:12px;}
-  .session-item{
-    display:flex;align-items:center;gap:18px;background:#fff;border:1px solid var(--line);
-    border-radius:14px;padding:16px 20px;flex-wrap:wrap;
-  }
-  .session-date{
-    flex:none;width:52px;height:52px;border-radius:12px;background:var(--gradient);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;
-  }
-  .session-date .d{font-family:var(--font-display);font-size:17px;line-height:1;}
-  .session-date .m{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;}
-  .session-info{flex:1;min-width:160px;}
-  .session-info h4{font-size:14px;margin-bottom:3px;}
-  .session-info p{font-size:12px;color:var(--ink-soft);}
-  .session-item .btn{margin-left:auto;padding:9px 16px;font-size:11px;}
-
-  .resource-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
-  .resource-item{
-    display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);
-    border-radius:12px;padding:16px 18px;
-  }
-  .resource-icon{
-    width:38px;height:38px;border-radius:9px;background:var(--surface-0);color:var(--purple);
-    display:flex;align-items:center;justify-content:center;flex:none;
-  }
-  .resource-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;}
-  .resource-item h4{font-size:13px;margin-bottom:2px;}
-  .resource-item p{font-size:11.5px;color:var(--ink-soft);}
-  .resource-item a{margin-left:auto;flex:none;color:var(--purple);}
-  .resource-item a svg{width:18px;height:18px;stroke:currentColor;fill:none;}
-
-  @media (max-width:900px){
-    .dash-wrap{grid-template-columns:1fr;}
-    .dash-sidebar{position:static;}
-    .dash-nav-list{display:flex;flex-wrap:wrap;gap:6px;}
-    .dash-nav-list a{margin-bottom:0;}
-    .dash-stats{grid-template-columns:1fr;}
-    .resource-grid{grid-template-columns:1fr;}
-    .session-item .btn{margin-left:0;width:100%;justify-content:center;}
-  }
-
 </style>
 </head>
 <body>
@@ -745,58 +546,142 @@
   </div>
 </header>
 
-<!-- ===================== PAGE HERO ===================== -->
-<section class="page-hero">
-  <div class="wrap">
-    <span class="eyebrow">Contact</span>
-    <h1>Get in Touch.</h1>
-    <p>Questions about membership, refunds, or something else entirely — send a message and we'll get back to you directly.</p>
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">HUEBLOC Trading · Est. MMXXIV</span>
+      <h1>Trade with the discipline<br>of an <em>empire</em>.</h1>
+      <p class="lede">HUEBLOC Trading is a premium trading community built on strategy, discipline, and growth — arming traders with the mindset and the method to master the markets.</p>
+      <div class="hero-actions">
+        <a href="client-area.html" class="btn btn-primary">Enter the Bloc →</a>
+      </div>
+    </div>
+    <div class="chart" id="heroChart" aria-hidden="true">
+      <span class="hero-note">HUEB · 1D</span>
+    </div>
   </div>
 </section>
 
-<!-- ===================== CONTACT FORM ===================== -->
-<section class="auth-section">
-  <div class="wrap" style="max-width:560px;margin:0 auto;">
-    <div class="auth-form-card reveal">
-      <div id="contactFormBody" class="auth-form-body">
-        <h3>Send Us a Message</h3>
-        <p>Fill out the form below, or email us directly at <a href="mailto:hueblocsolutionsinc@huebloc.com" style="color:var(--purple);text-decoration:underline;">hueblocsolutionsinc@huebloc.com</a>.</p>
-        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
-          <input type="hidden" name="form-name" value="contact">
-          <p style="position:absolute;left:-9999px;">
-            <label>Leave this field blank: <input name="bot-field"></label>
-          </p>
-          <div class="field">
-            <label for="cName">Name</label>
-            <input type="text" id="cName" name="name" required>
-          </div>
-          <div class="field">
-            <label for="cEmail">Email Address</label>
-            <input type="email" id="cEmail" name="email" required>
-          </div>
-          <div class="field">
-            <label for="cReason">Reason for Contact</label>
-            <select id="cReason" name="reason">
-              <option>General Question</option>
-              <option>Membership Support</option>
-              <option>Refund Request</option>
-              <option>Partnership / Media</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="cMessage">Message</label>
-            <textarea id="cMessage" name="message" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary auth-submit">Send Message</button>
-          <div class="auth-inline-note" id="contactError">Something went wrong sending your message — please email us directly instead.</div>
-        </form>
+<div class="divider"></div>
+
+<!-- ===================== PILLARS ===================== -->
+<section class="pillars">
+  <div class="wrap">
+    <div class="pillars-head reveal">
+      <span class="eyebrow">The Standard</span>
+      <h2>Three pillars. One trading standard.</h2>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M5 21V9M9 21V9M15 21V9M19 21V9M3 9l9-5 9 5"/></svg>
+        </div>
+        <span class="num">01</span>
+        <h3>Discipline</h3>
+        <p>Structure over impulse. Every position follows a system, not a feeling — the same standard, every session.</p>
       </div>
-      <div class="auth-success" id="contactSuccess">
-        <div class="icon"><svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg></div>
-        <h3>Message Sent</h3>
-        <p>Thanks for reaching out — we'll get back to you within 1–2 business days.</p>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 2.5 4 5.5 4 8a4 4 0 0 1-8 0c0-2.5 1-5.5 4-8Z"/><path d="M12 21v-6M8 21h8"/></svg>
+        </div>
+        <span class="num">02</span>
+        <h3>Strategy</h3>
+        <p>Frameworks refined across market cycles — not guesswork, and not chasing every candle.</p>
       </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V10M10 19V4M16 19v-7M22 19H2"/></svg>
+        </div>
+        <span class="num">03</span>
+        <h3>Growth</h3>
+        <p>Compounding skill first, capital second. The mission is built for the long game, not the next candle.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-visual reveal">
+      <img src="badge-logo.png" alt="HUEBLOC Trading — Discipline, Strategy, Growth seal">
+    </div>
+    <div class="reveal">
+      <span class="eyebrow about-eyebrow">About HUEBLOC</span>
+      <h2>Built by traders. Refined by the markets.</h2>
+      <p>HUEBLOC Trading began as one trader's personal system for staying disciplined inside chaotic markets. It's grown into a standing community — traders sharing structure, strategy, and hard-won lessons, built around the same three pillars every time.</p>
+      <p>No noise, no guarantees, no chasing green candles. Just a repeatable process and a room full of people holding each other to it.</p>
+      <div class="about-features">
+        <div class="about-feature"><span class="dot"></span><span>Structured curriculum</span></div>
+        <div class="about-feature"><span class="dot"></span><span>Weekly live sessions</span></div>
+        <div class="about-feature"><span class="dot"></span><span>Direct mentor access</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHAT'S INSIDE ===================== -->
+<section class="inside" id="inside">
+  <div class="wrap">
+    <div class="inside-head reveal">
+      <span class="eyebrow">What's Inside</span>
+      <h2>Unlocked the moment you join.</h2>
+      <p>One membership, everything included. No tiers to decode, no upsells buried behind the paywall.</p>
+    </div>
+    <div class="card-grid card-grid-2">
+      <div class="inside-card reveal">
+        <span class="tag">Curriculum</span>
+        <h3>The HUEBLOC Playbook</h3>
+        <p>The full framework behind the pillars — how we read structure, size risk, and plan a trade before it's ever placed.</p>
+      </div>
+      <div class="inside-card reveal">
+        <span class="tag">Mentorship</span>
+        <h3>Live Trading Sessions</h3>
+        <p>Weekly sessions and direct mentor access — real charts, real questions, no recycled webinars.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="faq" id="faq">
+  <div class="wrap faq-grid">
+    <div class="faq-head reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Before you enter the Bloc</h2>
+      <p>The short answers. For everything else, our full FAQ has you covered.</p>
+      <a href="faq.html" class="btn btn-ghost-light faq-more">View Full FAQ</a>
+    </div>
+    <div class="reveal">
+      <div class="faq-item open">
+        <div class="faq-q"><span>What do I get after I join?</span><span class="plus"></span></div>
+        <div class="faq-a"><p>Immediate access to the full HUEBLOC playbook and our live session schedule — everything unlocks the moment payment is confirmed.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>How does the payment &amp; access system work?</span><span class="plus"></span></div>
+        <div class="faq-a"><p>Register with your email, complete checkout, and your account is unlocked automatically. From then on, you log in with that same email — no separate passwords to lose track of.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Do you guarantee trading results?</span><span class="plus"></span></div>
+        <div class="faq-a"><p>No. Trading involves real risk of loss and no outcome is guaranteed. HUEBLOC provides education, structure, and community — not financial advice or promised returns. See our Terms of Use for the full disclosure.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span>Is there a refund policy?</span><span class="plus"></span></div>
+        <div class="faq-a"><p>All sales are final — HUEBLOC does not offer refunds, since access to the full curriculum unlocks immediately upon purchase. Full details are in our Terms of Use.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL CTA ===================== -->
+<section class="cta-band">
+  <div class="wrap">
+    <span class="eyebrow">Ready When You Are</span>
+    <h2>The Bloc is open.</h2>
+    <p>Join a community built on discipline, sharpened by strategy, and playing the long game.</p>
+    <div class="hero-actions">
+      <a href="client-area.html" class="btn btn-primary">Enter the Bloc →</a>
     </div>
   </div>
 </section>
@@ -869,6 +754,26 @@ if (burger && navLinks) {
   }));
 }
 
+// FAQ accordion
+document.querySelectorAll('.faq-item').forEach(item => {
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  if (item.classList.contains('open')) a.style.maxHeight = a.scrollHeight + 'px';
+  q.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    // close others within the same list/category only
+    const scope = item.closest('.faq-list') || item.parentElement;
+    scope.querySelectorAll('.faq-item.open').forEach(o => {
+      o.classList.remove('open');
+      o.querySelector('.faq-a').style.maxHeight = 0;
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      a.style.maxHeight = a.scrollHeight + 'px';
+    }
+  });
+});
+
 // Scroll reveal
 const revealEls = document.querySelectorAll('.reveal');
 if (revealEls.length) {
@@ -878,32 +783,18 @@ if (revealEls.length) {
   revealEls.forEach(el => io.observe(el));
 }
 
-// ===== Contact form — submits to Netlify Forms via fetch (no page reload) =====
-const contactForm = document.getElementById('contactForm');
-const contactFormBody = document.getElementById('contactFormBody');
-const contactSuccess = document.getElementById('contactSuccess');
-const contactError = document.getElementById('contactError');
-
-if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    contactError.classList.remove('show');
-
-    const data = new URLSearchParams(new FormData(contactForm)).toString();
-
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: data,
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('Form submission failed');
-        contactFormBody.classList.add('hidden');
-        contactSuccess.classList.add('active');
-      })
-      .catch(() => {
-        contactError.classList.add('show');
-      });
+// Hero candlestick skyline (homepage only)
+const chart = document.getElementById('heroChart');
+if (chart) {
+  const colors = ['#8B5CF6', '#7C6EF0', '#6C7FEA', '#5C90E3', '#3B82F6', '#2C9BDB', '#1AB4C0', '#06B6D4'];
+  const heights = [30, 45, 38, 58, 50, 70, 62, 82, 74, 95, 88, 68, 78, 55, 90, 72];
+  heights.forEach((h, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = h + '%';
+    bar.style.background = colors[i % colors.length];
+    bar.style.animationDelay = (i * 0.06) + 's';
+    chart.appendChild(bar);
   });
 }
 
