@@ -141,7 +141,7 @@
   }
   header.scrolled .wrap{box-shadow:0 10px 30px -10px rgba(11,16,32,.25);}
   .brand{display:flex;align-items:center;gap:10px;}
-  .brand img{height:38px;width:auto;}
+  .brand img{height:152px;width:auto;}
   .brand-text{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.06em;color:var(--ink);}
   .brand-text span{
     display:block;font-family:var(--font-mono);font-weight:400;font-size:9px;letter-spacing:.28em;
@@ -169,7 +169,7 @@
   .hero{
     background:radial-gradient(120% 100% at 15% 0%, #131a35 0%, var(--deep) 55%, #070a16 100%);
     color:var(--paper);
-    padding:170px 0 120px;
+    padding:290px 0 120px;
     overflow:hidden;
     position:relative;
   }
@@ -402,7 +402,7 @@
   }
   @media (max-width:760px){
     nav.links{
-      position:fixed;top:80px;left:20px;right:20px;
+      position:fixed;top:136px;left:20px;right:20px;
       background:var(--paper);border-radius:16px;
       flex-direction:column;align-items:flex-start;
       padding:24px;gap:18px;
@@ -412,6 +412,8 @@
     }
     nav.links.open{transform:translateY(0);opacity:1;pointer-events:auto;}
     .burger{display:block;}
+    .brand img{height:72px;}
+    .page-hero{padding-top:180px;}
     .nav-actions .btn:first-child{display:none;}
     .about-features{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
@@ -422,7 +424,7 @@
   .page-hero{
     background:radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
     color:var(--paper);
-    padding:160px 0 90px;
+    padding:280px 0 90px;
     text-align:center;
     position:relative;
     overflow:hidden;
@@ -590,6 +592,23 @@
   .auth-success p{font-size:14px;color:var(--ink-soft);line-height:1.7;}
   .auth-success .email-echo{color:var(--purple);font-weight:700;}
   .auth-form-body.hidden{display:none;}
+
+  .payment-success-banner{
+    display:flex;gap:14px;align-items:flex-start;
+    background:rgba(16,185,129,.08);
+    border:1px solid rgba(16,185,129,.3);
+    border-radius:12px;
+    padding:18px 22px;
+    margin:0 auto 28px;
+    max-width:460px;
+  }
+  .payment-success-banner .icon{
+    width:28px;height:28px;border-radius:50%;background:var(--green);
+    display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .payment-success-banner .icon svg{width:15px;height:15px;stroke:#fff;fill:none;}
+  .payment-success-banner strong{display:block;font-size:14.5px;margin-bottom:4px;color:var(--ink);}
+  .payment-success-banner p{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0;}
 
   .preview-link{text-align:center;margin-top:36px;font-size:13px;color:var(--ink-soft);}
   .preview-link a{color:var(--purple);font-weight:700;text-decoration:underline;}
@@ -784,6 +803,13 @@
 
     <!-- ===== LOGIN PANEL ===== -->
     <div class="auth-panel" id="panelLogin">
+      <div class="payment-success-banner" id="paymentSuccessBanner" style="display:none;">
+        <div class="icon"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div>
+          <strong>Payment successful!</strong>
+          <p>Enter your email below and we'll send you a secure sign-in link to unlock your account — no password needed.</p>
+        </div>
+      </div>
       <div class="auth-grid" style="grid-template-columns:1fr;max-width:460px;margin:0 auto;">
         <div class="auth-form-card reveal">
           <div id="loginFormBody" class="auth-form-body">
@@ -825,7 +851,7 @@
           <a href="#" aria-label="Instagram"><img src="instagram.png" alt="" style="width:19px;height:19px;"></a>
           <a href="#" aria-label="Telegram"><img src="telegram.png" alt="" style="width:19px;height:19px;"></a>
           <a href="#" aria-label="TikTok"><img src="tiktok.png" alt="" style="width:18px;height:18px;"></a>
-          <a href="mailto:contact@huebloc.com" aria-label="Email"><img src="email.png" alt="" style="width:19px;height:19px;"></a>
+          <a href="mailto:hueblocsolutionsinc@huebloc.com" aria-label="Email"><img src="email.png" alt="" style="width:19px;height:19px;"></a>
         </div>
       </div>
       <div class="footer-col">
@@ -918,6 +944,21 @@ if (switchToRegister) {
   });
 }
 
+// ===== Post-payment redirect handling =====
+// Stripe's Payment Link sends customers back here as:
+//   client-area.html?tab=login&justPaid=true
+// This switches to the Login tab automatically and shows a clear
+// confirmation banner, so a customer who just paid isn't left staring
+// at the Register/pricing panel wondering if their payment worked.
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('tab') === 'login') {
+  showTab('login');
+}
+if (urlParams.get('justPaid') === 'true') {
+  const banner = document.getElementById('paymentSuccessBanner');
+  if (banner) banner.style.display = 'flex';
+}
+
 // ===== Register form — redirects to Stripe Payment Link =====
 // Live: Craig's $50 one-time membership Payment Link. Stripe Payment
 // Links accept ?prefilled_email= so the email entered here carries
@@ -942,32 +983,26 @@ if (registerForm) {
   });
 }
 
-// ===== Login form — calls the real magic-link function =====
+// ===== Login form — prototype simulates the magic-link email =====
+// Once deployed on Netlify, replace the simulated success below with:
+//   const res = await fetch('/.netlify/functions/magic-link', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ email })
+//   });
+// The function always returns a generic "check your email" message
+// whether or not the account exists, so the UI logic barely changes.
 const loginForm = document.getElementById('loginForm');
 const loginFormBody = document.getElementById('loginFormBody');
 const loginSuccess = document.getElementById('loginSuccess');
 const emailEcho = document.getElementById('emailEcho');
 if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
+  loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
-    const submitBtn = loginForm.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-
-    try {
-      await fetch('/.netlify/functions/magic-link', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-    } catch (err) {
-      console.error('Error requesting magic link:', err);
-    }
-
     emailEcho.textContent = email;
     loginFormBody.classList.add('hidden');
     loginSuccess.classList.add('active');
-    submitBtn.disabled = false;
   });
 }
 
