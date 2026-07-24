@@ -942,26 +942,32 @@ if (registerForm) {
   });
 }
 
-// ===== Login form — prototype simulates the magic-link email =====
-// Once deployed on Netlify, replace the simulated success below with:
-//   const res = await fetch('/.netlify/functions/magic-link', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ email })
-//   });
-// The function always returns a generic "check your email" message
-// whether or not the account exists, so the UI logic barely changes.
+// ===== Login form — calls the real magic-link function =====
 const loginForm = document.getElementById('loginForm');
 const loginFormBody = document.getElementById('loginFormBody');
 const loginSuccess = document.getElementById('loginSuccess');
 const emailEcho = document.getElementById('emailEcho');
 if (loginForm) {
-  loginForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
+    const submitBtn = loginForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+
+    try {
+      await fetch('/.netlify/functions/magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    } catch (err) {
+      console.error('Error requesting magic link:', err);
+    }
+
     emailEcho.textContent = email;
     loginFormBody.classList.add('hidden');
     loginSuccess.classList.add('active');
+    submitBtn.disabled = false;
   });
 }
 
