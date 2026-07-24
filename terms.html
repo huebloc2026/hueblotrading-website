@@ -141,7 +141,7 @@
   }
   header.scrolled .wrap{box-shadow:0 10px 30px -10px rgba(11,16,32,.25);}
   .brand{display:flex;align-items:center;gap:10px;}
-  .brand img{height:38px;width:auto;}
+  .brand img{height:152px;width:auto;}
   .brand-text{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.06em;color:var(--ink);}
   .brand-text span{
     display:block;font-family:var(--font-mono);font-weight:400;font-size:9px;letter-spacing:.28em;
@@ -169,7 +169,7 @@
   .hero{
     background:radial-gradient(120% 100% at 15% 0%, #131a35 0%, var(--deep) 55%, #070a16 100%);
     color:var(--paper);
-    padding:170px 0 120px;
+    padding:290px 0 120px;
     overflow:hidden;
     position:relative;
   }
@@ -401,7 +401,7 @@
   }
   @media (max-width:760px){
     nav.links{
-      position:fixed;top:80px;left:20px;right:20px;
+      position:fixed;top:136px;left:20px;right:20px;
       background:var(--paper);border-radius:16px;
       flex-direction:column;align-items:flex-start;
       padding:24px;gap:18px;
@@ -411,6 +411,8 @@
     }
     nav.links.open{transform:translateY(0);opacity:1;pointer-events:auto;}
     .burger{display:block;}
+    .brand img{height:72px;}
+    .page-hero{padding-top:180px;}
     .nav-actions .btn:first-child{display:none;}
     .about-features{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
@@ -421,7 +423,7 @@
   .page-hero{
     background:radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
     color:var(--paper);
-    padding:160px 0 90px;
+    padding:280px 0 90px;
     text-align:center;
     position:relative;
     overflow:hidden;
@@ -609,11 +611,8 @@
     <div class="legal-section reveal" id="refunds">
       <span class="legal-num">05</span>
       <h2>Refund Policy</h2>
-      <p>[Placeholder — to be finalized with Craig] Refund requests submitted within [X] days of purchase, and prior to substantial use of the curriculum, may be eligible for a full or partial refund at HUEBLOC Trading's discretion. Requests can be submitted via our Contact page.</p>
-      <div class="legal-callout">
-        <p><strong>Note for review:</strong> This section needs a specific refund window and any conditions that disqualify a refund (e.g., after live session attendance, after a certain % of curriculum accessed). Replace this placeholder before launch.</p>
-      </div>
-      <p>Because membership is a one-time payment, there is no recurring charge to cancel. If a refund is approved under the window above, it will be issued to your original payment method; HUEBLOC Trading reserves the right to revoke access upon issuing a refund.</p>
+      <p>All sales are final. Due to the nature of digital educational content and the immediate access granted to curriculum materials upon purchase, HUEBLOC Trading does not offer refunds. By completing your purchase, you acknowledge and agree to this policy.</p>
+      <p>HUEBLOC Trading may, at its sole discretion, issue a refund in exceptional circumstances. Any such refund is not an entitlement and does not set a precedent for future requests. If a refund is issued for any reason, HUEBLOC Trading reserves the right to revoke access to the Services immediately upon that refund being processed.</p>
     </div>
 
     <div class="legal-section reveal" id="ip">
@@ -627,7 +626,7 @@
       <span class="legal-num">07</span>
       <h2>Suspension &amp; Termination</h2>
       <p>HUEBLOC Trading reserves the right to suspend or terminate your access to the Services for violation of these Terms, non-payment, or conduct we determine — in good faith — to be harmful to the community.</p>
-      <p>You may discontinue use of the Services at any time. Termination of your access does not entitle you to a refund except as described in Section 5.</p>
+      <p>You may discontinue use of the Services at any time. As described in Section 5, termination of your access does not entitle you to a refund.</p>
     </div>
 
     <div class="legal-section reveal" id="warranties">
@@ -652,17 +651,17 @@
     <div class="legal-section reveal" id="law">
       <span class="legal-num">11</span>
       <h2>Governing Law</h2>
-      <p>[Placeholder] These Terms are governed by the laws of [State/Country], without regard to its conflict of law principles. Any disputes arising under these Terms shall be resolved in the courts located in [Jurisdiction].</p>
+      <p>These Terms are governed by the laws of the State of Texas, without regard to its conflict of law principles. Any disputes arising under these Terms shall be resolved in the state or federal courts located in Texas.</p>
     </div>
 
     <div class="legal-section reveal" id="contact">
       <span class="legal-num">12</span>
       <h2>Contact Us</h2>
-      <p>Questions about these Terms can be directed to us via our <a href="contact.html" style="color:var(--purple);text-decoration:underline;">Contact page</a> or by emailing <a href="mailto:contact@huebloc.com" style="color:var(--purple);text-decoration:underline;">contact@huebloc.com</a>.</p>
+      <p>Questions about these Terms can be directed to us via our <a href="contact.html" style="color:var(--purple);text-decoration:underline;">Contact page</a> or by emailing <a href="mailto:hueblocsolutionsinc@huebloc.com" style="color:var(--purple);text-decoration:underline;">hueblocsolutionsinc@huebloc.com</a>.</p>
     </div>
 
     <div class="legal-footer-note">
-      <p><strong>Drafting note (remove before launch):</strong> This is a working first draft intended to establish structure and coverage — it is not legal advice. Bracketed placeholders (refund window, governing jurisdiction, effective date) need Craig's input, and the full document should be reviewed by a qualified attorney before HUEBLOC Trading goes live, given it accepts payment and discusses financial risk.</p>
+      <p><strong>Drafting note (remove before launch):</strong> This is a working first draft intended to establish structure and coverage — it is not legal advice. All bracketed placeholders are now filled in, but the full document should still be reviewed by a qualified attorney before HUEBLOC Trading goes live, given it accepts payment and discusses financial risk.</p>
     </div>
 
   </div>
@@ -681,7 +680,7 @@
           <a href="#" aria-label="Instagram"><img src="instagram.png" alt="" style="width:19px;height:19px;"></a>
           <a href="#" aria-label="Telegram"><img src="telegram.png" alt="" style="width:19px;height:19px;"></a>
           <a href="#" aria-label="TikTok"><img src="tiktok.png" alt="" style="width:18px;height:18px;"></a>
-          <a href="mailto:contact@huebloc.com" aria-label="Email"><img src="email.png" alt="" style="width:19px;height:19px;"></a>
+          <a href="mailto:hueblocsolutionsinc@huebloc.com" aria-label="Email"><img src="email.png" alt="" style="width:19px;height:19px;"></a>
         </div>
       </div>
       <div class="footer-col">
