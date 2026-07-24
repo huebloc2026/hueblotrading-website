@@ -79,6 +79,22 @@ async function handleRequestLink(event) {
     return genericResponse;
   }
 
+  // Rate limit: if a link was already requested for this email in the
+  // last 60 seconds, don't send another one. Prevents someone spamming
+  // the endpoint for a given address (their own or someone else's).
+  const oneMinuteAgo = new Date(Date.now() - 60 * 1000).toISOString();
+  const { data: recentLink } = await supabase
+    .from('magic_links')
+    .select('id')
+    .eq('email', email)
+    .gte('created_at', oneMinuteAgo)
+    .limit(1)
+    .maybeSingle();
+
+  if (recentLink) {
+    return genericResponse;
+  }
+
   // Generate the token: raw version goes in the email, only the hash is stored.
   const rawToken = crypto.randomBytes(32).toString('hex');
   const tokenHash = hashToken(rawToken);
