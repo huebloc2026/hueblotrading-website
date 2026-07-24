@@ -5,14 +5,15 @@
 // magic-link function just reads it.
 //
 // Membership is a single one-time $50 payment — no subscription
-// lifecycle to track. We only need two events:
+// lifecycle to track. We listen for three events:
 //   checkout.session.completed  → grants access
-//   charge.refunded             → revokes access automatically if
-//                                  Craig issues a refund from Stripe
+//   charge.refunded             → revokes access if Craig issues a refund
+//   charge.dispute.created      → revokes access immediately if the
+//                                  customer opens a chargeback with their bank
 //
 // Stripe dashboard → Developers → Webhooks → Add endpoint:
 //   https://huebloc.com/.netlify/functions/stripe-webhook
-// Events to send: checkout.session.completed, charge.refunded
+// Events to send: checkout.session.completed, charge.refunded, charge.dispute.created
 //
 // Env vars required (Netlify → Site settings → Environment variables):
 //   STRIPE_SECRET_KEY       sk_live_... (or sk_test_... while testing)
@@ -93,6 +94,29 @@ exports.handler = async (event) => {
         const { error } = await supabase
           .from('members')
           .update({ payment_status: 'refunded' })
+          .eq('stripe_payment_intent_id', paymentIntentId);
+
+        if (error) throw error;
+        break;
+      }
+
+      case 'charge.dispute.created': {
+        // A chargeback — the customer disputed the charge with their bank
+        // rather than requesting a refund from Craig directly. Revoke
+        // access immediately; the dispute's eventual outcome (won/lost)
+        // isn't tracked here, so restoring access after a won dispute
+        // is a manual step in Supabase for now.
+        const dispute = stripeEvent.data.object;
+        const paymentIntentId = dispute.payment_intent;
+
+        if (!paymentIntentId) {
+          console.error('charge.dispute.created with no payment_intent on dispute', dispute.id);
+          break;
+        }
+
+        const { error } = await supabase
+          .from('members')
+          .update({ payment_status: 'disputed' })
           .eq('stripe_payment_intent_id', paymentIntentId);
 
         if (error) throw error;
