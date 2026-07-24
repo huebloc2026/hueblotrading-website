@@ -97,7 +97,7 @@ async function handleRequestLink(event) {
 
   try {
     await resend.emails.send({
-      from: 'HUEBLOC Trading <access@huebloc.com>', // must be a domain verified in Resend
+      from: 'HUEBLOC Trading <access@mail.huebloc.com>', // must match the subdomain verified in Resend
       to: email,
       subject: 'Your HUEBLOC sign-in link',
       html: `
