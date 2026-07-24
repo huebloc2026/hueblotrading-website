@@ -1,9 +1,10 @@
 # netlify.toml — deployment config for HUEBLOC Trading
 #
-# This is a plain static site (no build step) plus two serverless
-# functions. Netlify picks this up automatically once the repo is
-# connected — no build command needed.
+# This is a plain static site (no build step for the HTML) plus two
+# serverless functions. The build command installs the functions'
+# npm dependencies before Netlify bundles and deploys them.
 
 [build]
   publish = "."
   functions = "netlify/functions"
+  command = "npm install --prefix netlify/functions"
