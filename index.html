@@ -141,7 +141,7 @@
   }
   header.scrolled .wrap{box-shadow:0 10px 30px -10px rgba(11,16,32,.25);}
   .brand{display:flex;align-items:center;gap:10px;}
-  .brand img{height:38px;width:auto;}
+  .brand img{height:152px;width:auto;}
   .brand-text{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.06em;color:var(--ink);}
   .brand-text span{
     display:block;font-family:var(--font-mono);font-weight:400;font-size:9px;letter-spacing:.28em;
@@ -169,7 +169,7 @@
   .hero{
     background:radial-gradient(120% 100% at 15% 0%, #131a35 0%, var(--deep) 55%, #070a16 100%);
     color:var(--paper);
-    padding:170px 0 120px;
+    padding:290px 0 120px;
     overflow:hidden;
     position:relative;
   }
@@ -259,18 +259,21 @@
   .about-visual{
     aspect-ratio:4/5;
     border-radius:20px;
-    background:linear-gradient(160deg,var(--deep) 0%, var(--slate) 100%);
+    background:var(--surface-0);
+    border:1px solid var(--line);
     position:relative;overflow:hidden;
     display:flex;align-items:center;justify-content:center;
   }
   .about-visual::before{
-    content:"";position:absolute;inset:0;
-    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 2px, transparent 2px 40px);
+    content:"";
+    position:absolute;width:360px;height:360px;border-radius:50%;
+    background:radial-gradient(circle, rgba(139,92,246,.22), transparent 70%);
   }
-  .about-visual .cols{display:flex;gap:16px;position:relative;z-index:2;}
-  .about-visual .col{width:14px;height:180px;border-radius:4px;background:linear-gradient(180deg,#cfd4de,#8b93a3);}
-  .about-visual .col:nth-child(2){height:220px;}
-  .about-visual .col:nth-child(3){height:150px;}
+  .about-visual img{
+    position:relative;z-index:2;
+    width:76%;max-width:340px;
+    filter:drop-shadow(0 24px 40px rgba(11,16,32,.14));
+  }
   .about-eyebrow{color:var(--purple);}
   .about h2{font-size:clamp(28px,3.2vw,38px);margin:18px 0 22px;}
   .about p{font-size:16px;line-height:1.85;color:var(--ink-soft);margin-bottom:18px;max-width:560px;}
@@ -402,7 +405,7 @@
   }
   @media (max-width:760px){
     nav.links{
-      position:fixed;top:80px;left:20px;right:20px;
+      position:fixed;top:136px;left:20px;right:20px;
       background:var(--paper);border-radius:16px;
       flex-direction:column;align-items:flex-start;
       padding:24px;gap:18px;
@@ -412,6 +415,8 @@
     }
     nav.links.open{transform:translateY(0);opacity:1;pointer-events:auto;}
     .burger{display:block;}
+    .brand img{height:72px;}
+    .hero{padding-top:190px;}
     .nav-actions .btn:first-child{display:none;}
     .about-features{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
@@ -422,7 +427,7 @@
   .page-hero{
     background:radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
     color:var(--paper);
-    padding:160px 0 90px;
+    padding:280px 0 90px;
     text-align:center;
     position:relative;
     overflow:hidden;
@@ -595,11 +600,7 @@
 <section class="about" id="about">
   <div class="wrap about-grid">
     <div class="about-visual reveal">
-      <div class="cols">
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col"></div>
-      </div>
+      <img src="badge-logo.png" alt="HUEBLOC Trading — Discipline, Strategy, Growth seal">
     </div>
     <div class="reveal">
       <span class="eyebrow about-eyebrow">About HUEBLOC</span>
@@ -693,7 +694,7 @@
           <a href="#" aria-label="Instagram"><img src="instagram.png" alt="" style="width:19px;height:19px;"></a>
           <a href="#" aria-label="Telegram"><img src="telegram.png" alt="" style="width:19px;height:19px;"></a>
           <a href="#" aria-label="TikTok"><img src="tiktok.png" alt="" style="width:18px;height:18px;"></a>
-          <a href="mailto:contact@huebloc.com" aria-label="Email"><img src="email.png" alt="" style="width:19px;height:19px;"></a>
+          <a href="mailto:hueblocsolutionsinc@huebloc.com" aria-label="Email"><img src="email.png" alt="" style="width:19px;height:19px;"></a>
         </div>
       </div>
       <div class="footer-col">
