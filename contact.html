@@ -416,7 +416,16 @@
     .burger{display:block;}
     .brand img{height:72px;}
     .hero{padding-top:190px;}
-    .page-hero{padding-top:180px;}
+    .page-hero{
+      padding-top:180px;
+      background-image:
+        linear-gradient(180deg, rgba(11,16,32,.35) 0%, rgba(11,16,32,.6) 100%),
+        url('hero-warrior-mobile.jpg'),
+        radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
+      background-size:cover, cover, cover;
+      background-position:0 0, center top, 0 0;
+      background-repeat:no-repeat;
+    }
     .nav-actions .btn:first-child{display:none;}
     .about-features{grid-template-columns:1fr;}
     .footer-grid{grid-template-columns:1fr;}
