@@ -380,7 +380,9 @@
     flex-wrap:wrap;
   }
   .disclaimer{font-size:11.5px;line-height:1.8;color:rgba(242,239,255,.35);max-width:640px;}
-  .copyline{font-size:12px;color:rgba(242,239,255,.4);white-space:nowrap;}
+  .copyline{font-size:12px;color:rgba(242,239,255,.4);}
+  .copyline a{color:var(--purple-soft);text-decoration:underline;}
+  .copyline a:hover{color:var(--paper);}
 
   /* ===================== REVEAL ===================== */
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
@@ -422,7 +424,10 @@
 
   /* ===================== INTERIOR PAGE HERO ===================== */
   .page-hero{
-    background:radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
+    background:
+      linear-gradient(180deg, rgba(11,16,32,.3) 0%, rgba(11,16,32,.5) 100%),
+      url('hero-warrior-columns.jpg') center 35% / cover no-repeat,
+      radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
     color:var(--paper);
     padding:280px 0 90px;
     text-align:center;
@@ -510,6 +515,15 @@
   @media (max-width:760px){
     .legal-toc ol{columns:1;}
     .faq-category-head h2{font-size:19px;}
+    .page-hero{
+      background-image:
+        linear-gradient(180deg, rgba(11,16,32,.35) 0%, rgba(11,16,32,.6) 100%),
+        url('hero-warrior-mobile.jpg'),
+        radial-gradient(120% 100% at 50% 0%, #131a35 0%, var(--deep) 60%, #070a16 100%);
+      background-size:cover, cover, cover;
+      background-position:0 0, center top, 0 0;
+      background-repeat:no-repeat;
+    }
   }
 
   /* ===================== CLIENT AREA / AUTH ===================== */
@@ -879,7 +893,7 @@
     </div>
     <div class="footer-bottom">
       <p class="disclaimer">Trading involves substantial risk of loss and is not suitable for all investors. Past performance is not indicative of future results. HUEBLOC Trading provides educational content and community access only — not financial advice.</p>
-      <p class="copyline">© 2026 HUEBLOC Trading · huebloc.com</p>
+      <p class="copyline">© 2026 HUEBLOC Trading · huebloc.com · Site by <a href="http://prolificdesigns.io" target="_blank" rel="noopener">Prolific Designs</a></p>
     </div>
   </div>
 </footer>
@@ -983,26 +997,32 @@ if (registerForm) {
   });
 }
 
-// ===== Login form — prototype simulates the magic-link email =====
-// Once deployed on Netlify, replace the simulated success below with:
-//   const res = await fetch('/.netlify/functions/magic-link', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ email })
-//   });
-// The function always returns a generic "check your email" message
-// whether or not the account exists, so the UI logic barely changes.
+// ===== Login form — calls the real magic-link function =====
 const loginForm = document.getElementById('loginForm');
 const loginFormBody = document.getElementById('loginFormBody');
 const loginSuccess = document.getElementById('loginSuccess');
 const emailEcho = document.getElementById('emailEcho');
 if (loginForm) {
-  loginForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
+    const submitBtn = loginForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+
+    try {
+      await fetch('/.netlify/functions/magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    } catch (err) {
+      console.error('Error requesting magic link:', err);
+    }
+
     emailEcho.textContent = email;
     loginFormBody.classList.add('hidden');
     loginSuccess.classList.add('active');
+    submitBtn.disabled = false;
   });
 }
 
