@@ -64,6 +64,11 @@ exports.handler = async (event) => {
           break;
         }
 
+        // Free/100%-off orders never get a payment_intent from Stripe — fall
+        // back to the checkout session's own ID so we always have a stable,
+        // non-null value to store instead of leaving this column empty.
+        const paymentReference = session.payment_intent || session.id;
+
         // Upsert on email: creates the member on first purchase,
         // or updates them if they somehow already had a row.
         const { error } = await supabase
@@ -72,7 +77,7 @@ exports.handler = async (event) => {
             {
               email,
               stripe_customer_id: session.customer,
-              stripe_payment_intent_id: session.payment_intent,
+              stripe_payment_intent_id: paymentReference,
               payment_status: 'active',
             },
             { onConflict: 'email' }
