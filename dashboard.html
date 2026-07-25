@@ -708,7 +708,7 @@
 <body class="auth-pending">
 
 <div class="dash-banner">
-  <strong>Note</strong> — playbook progress and session dates below are placeholder content, not yet tracked live.
+  <strong>Note</strong> — the Playbook is now real and tracks your actual progress. Live session dates and resources below are still placeholder content.
   <a href="#" id="logoutLink">Log Out</a>
 </div>
 
@@ -748,7 +748,7 @@
     <div class="dash-stats">
       <div class="dash-stat reveal">
         <div class="label">Playbook Progress</div>
-        <div class="value">4 / 12</div>
+        <div class="value" id="statProgress">—</div>
       </div>
       <div class="dash-stat reveal">
         <div class="label">Next Live Session</div>
@@ -763,59 +763,13 @@
     <div class="dash-section reveal" id="playbook">
       <div class="dash-section-head">
         <h2>The HUEBLOC Playbook</h2>
-        <span>4 of 12 modules complete</span>
+        <span id="playbookSummary">Loading…</span>
       </div>
-      <div class="module-list">
-        <div class="module-item">
-          <div class="module-left">
-            <div class="module-num">01</div>
-            <div>
-              <div class="module-title">Foundations of Market Structure</div>
-              <div class="module-meta">18 min · Video + Notes</div>
-            </div>
-          </div>
-          <span class="module-status done">Complete</span>
-        </div>
-        <div class="module-item">
-          <div class="module-left">
-            <div class="module-num">02</div>
-            <div>
-              <div class="module-title">Reading Trend &amp; Structure Shifts</div>
-              <div class="module-meta">24 min · Video + Notes</div>
-            </div>
-          </div>
-          <span class="module-status done">Complete</span>
-        </div>
-        <div class="module-item">
-          <div class="module-left">
-            <div class="module-num">03</div>
-            <div>
-              <div class="module-title">Risk &amp; Position Sizing</div>
-              <div class="module-meta">21 min · Video + Worksheet</div>
-            </div>
-          </div>
-          <span class="module-status done">Complete</span>
-        </div>
-        <div class="module-item">
-          <div class="module-left">
-            <div class="module-num">04</div>
-            <div>
-              <div class="module-title">Entry Discipline &amp; Confirmation</div>
-              <div class="module-meta">27 min · Video + Notes</div>
-            </div>
-          </div>
-          <span class="module-status progress">In Progress</span>
-        </div>
-        <div class="module-item">
-          <div class="module-left">
-            <div class="module-num">05</div>
-            <div>
-              <div class="module-title">Managing Trades in Real Time</div>
-              <div class="module-meta">22 min · Video + Notes</div>
-            </div>
-          </div>
-          <span class="module-status locked">Locked</span>
-        </div>
+      <div class="module-list" id="moduleList">
+        <div class="module-item"><div class="module-left"><div>Loading your progress…</div></div></div>
+      </div>
+      <div style="text-align:center;margin-top:20px;">
+        <a href="playbook.html" class="btn btn-ghost-light">Open Full Playbook →</a>
       </div>
     </div>
 
@@ -892,11 +846,54 @@
     document.getElementById('welcomeHeading').textContent = `Welcome back, ${namePart}.`;
 
     document.body.classList.remove('auth-pending');
+    loadPlaybookSummary();
   } catch (err) {
     console.error('Session check failed:', err);
     window.location.href = 'client-area.html?error=session_required';
   }
 })();
+
+// ===== Pull real Playbook progress for the overview cards =====
+async function loadPlaybookSummary() {
+  const listEl = document.getElementById('moduleList');
+  try {
+    const res = await fetch('/.netlify/functions/get-curriculum');
+    if (!res.ok) throw new Error('Failed to load curriculum');
+    const { phases } = await res.json();
+
+    const allLessons = phases.flatMap((p) => p.lessons);
+    const completedCount = allLessons.filter((l) => l.completed).length;
+
+    document.getElementById('statProgress').textContent = `${completedCount} / ${allLessons.length}`;
+    document.getElementById('playbookSummary').textContent = `${completedCount} of ${allLessons.length} lessons complete`;
+
+    if (!allLessons.length) {
+      listEl.innerHTML = '<div class="module-item"><div class="module-left"><div>Nothing published yet — check back soon.</div></div></div>';
+      return;
+    }
+
+    // Show the next incomplete lesson (or the last one, if all done) so this
+    // feels like a "continue where you left off" card rather than a full list.
+    const nextLesson = allLessons.find((l) => !l.completed) || allLessons[allLessons.length - 1];
+    const nextPhase = phases.find((p) => p.lessons.some((l) => l.id === nextLesson.id));
+
+    listEl.innerHTML = `
+      <div class="module-item">
+        <div class="module-left">
+          <div class="module-num">${nextLesson.lesson_number}</div>
+          <div>
+            <div class="module-title">${nextLesson.title}</div>
+            <div class="module-meta">Phase ${nextPhase.phase_number} · ${nextPhase.title}</div>
+          </div>
+        </div>
+        <span class="module-status ${nextLesson.completed ? 'done' : 'progress'}">${nextLesson.completed ? 'Complete' : 'Continue'}</span>
+      </div>
+    `;
+  } catch (err) {
+    console.error(err);
+    listEl.innerHTML = '<div class="module-item"><div class="module-left"><div>Couldn\'t load the Playbook right now.</div></div></div>';
+  }
+}
 
 // ===== Logout link in the banner =====
 const logoutLink = document.getElementById('logoutLink');
