@@ -853,7 +853,17 @@ async function loadCurriculum() {
     const data = await res.json();
     curriculum = data.phases || [];
     renderPhaseNav();
-    if (curriculum.length) {
+
+    // If a specific lesson was linked to (e.g. from the Dashboard's
+    // "Continue" card), jump straight to it instead of the first phase.
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedLessonId = urlParams.get('lesson');
+    const requestedLessonExists = requestedLessonId &&
+      curriculum.some((p) => p.lessons.some((l) => l.id === requestedLessonId));
+
+    if (requestedLessonExists) {
+      showLesson(requestedLessonId);
+    } else if (curriculum.length) {
       // Open the first phase and show its overview by default.
       showPhaseOverview(curriculum[0].id);
     } else {
