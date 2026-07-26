@@ -822,7 +822,7 @@ async function loadPlaybookSummary() {
     const nextPhase = phases.find((p) => p.lessons.some((l) => l.id === nextLesson.id));
 
     listEl.innerHTML = `
-      <div class="module-item">
+      <a href="playbook.html?lesson=${nextLesson.id}" class="module-item" style="text-decoration:none;color:inherit;cursor:pointer;">
         <div class="module-left">
           <div class="module-num">${nextLesson.lesson_number}</div>
           <div>
@@ -831,7 +831,7 @@ async function loadPlaybookSummary() {
           </div>
         </div>
         <span class="module-status ${nextLesson.completed ? 'done' : 'progress'}">${nextLesson.completed ? 'Complete' : 'Continue'}</span>
-      </div>
+      </a>
     `;
   } catch (err) {
     console.error(err);
