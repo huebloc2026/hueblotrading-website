@@ -747,7 +747,8 @@
     </div>
     <nav class="dash-nav-list">
       <a href="#" class="active"><svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l8-8 8 8M6 10v10h12V10"/></svg>Overview</a>
-      <a href="#playbook"><svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M18 3v18"/></svg>Playbook</a>
+      <a href="playbook.html" id="sidebarPlaybookLink"><svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M18 3v18"/></svg>Playbook</a>
+      <a href="#" id="sidebarDiscordLink" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12a2 2 0 1 0 0 .01M16 12a2 2 0 1 0 0 .01M7 6.5C9 5.5 11 5 12 5s3 .5 5 1.5c1.5 2 2 5 2 9-1.5 1-3 1.5-3 1.5l-1-1.7c-1 .3-2 .4-3 .4s-2-.1-3-.4L8 17c0 0-1.5-.5-3-1.5 0-4 .5-7 2-9Z"/></svg>Discord</a>
       <div class="divider-line"></div>
       <a href="#"><svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>Account</a>
       <a href="/.netlify/functions/logout"><svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>Log Out</a>
@@ -829,7 +830,15 @@
 // ===== Discord connection card =====
 // Once Craig sets up the Discord app, replace this with the real Client ID
 // from the Discord Developer Portal.
-const DISCORD_CLIENT_ID = '1535093344206594099';
+const DISCORD_CLIENT_ID = 'REPLACE_WITH_DISCORD_CLIENT_ID';
+// A permanent (never-expiring) invite link to Craig's Discord server —
+// used both for the sidebar tab and the "Open Discord Server" button
+// once a member has connected.
+const DISCORD_SERVER_URL = 'https://discord.gg/kvpgm3Usd';
+
+// The sidebar Discord tab always points here, connected or not — someone
+// who's already a member elsewhere shouldn't be blocked from the link.
+document.getElementById('sidebarDiscordLink').href = DISCORD_SERVER_URL;
 
 function renderDiscordCard(connected, username) {
   const title = document.getElementById('discordTitle');
@@ -840,12 +849,17 @@ function renderDiscordCard(connected, username) {
     title.textContent = 'Discord Connected';
     title.classList.add('status-connected');
     subtitle.textContent = username ? `Signed in as ${username}` : 'You have access to the private server.';
-    btn.style.display = 'none';
+    btn.style.display = 'inline-flex';
+    btn.textContent = 'Open Discord Server →';
+    btn.href = DISCORD_SERVER_URL;
+    btn.target = '_blank';
+    btn.rel = 'noopener';
   } else {
     title.textContent = 'Connect Your Discord';
     subtitle.textContent = 'Link your account to get access to the private HUEBLOC server.';
     btn.style.display = 'inline-flex';
     btn.textContent = 'Connect Discord';
+    btn.removeAttribute('target');
 
     if (DISCORD_CLIENT_ID.includes('REPLACE_WITH')) {
       btn.href = '#';
@@ -894,6 +908,10 @@ async function loadPlaybookSummary() {
     // feels like a "continue where you left off" card rather than a full list.
     const nextLesson = allLessons.find((l) => !l.completed) || allLessons[allLessons.length - 1];
     const nextPhase = phases.find((p) => p.lessons.some((l) => l.id === nextLesson.id));
+
+    // The sidebar "Playbook" tab gets the same deep link, so it behaves
+    // identically to clicking the card below.
+    document.getElementById('sidebarPlaybookLink').href = `playbook.html?lesson=${nextLesson.id}`;
 
     listEl.innerHTML = `
       <a href="playbook.html?lesson=${nextLesson.id}" class="module-item" style="text-decoration:none;color:inherit;cursor:pointer;">
