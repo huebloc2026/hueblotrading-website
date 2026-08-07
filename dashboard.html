@@ -634,6 +634,21 @@
   .dash-main > .sub{color:var(--ink-soft);font-size:14px;margin-bottom:38px;}
 
   .dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:46px;}
+
+  .discord-card{
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:22px 26px;margin-bottom:46px;flex-wrap:wrap;
+  }
+  .discord-card .left{display:flex;align-items:center;gap:16px;}
+  .discord-card .icon{
+    width:44px;height:44px;border-radius:12px;background:#5865F2;color:#fff;
+    display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .discord-card .icon svg{width:24px;height:24px;}
+  .discord-card h3{font-size:15px;margin-bottom:3px;}
+  .discord-card p{font-size:13px;color:var(--ink-soft);}
+  .discord-card .status-connected{color:var(--green);font-weight:700;}
   .dash-stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;}
   .dash-stat .label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase;}
   .dash-stat .value{font-family:var(--font-display);font-size:24px;margin-top:8px;}
@@ -754,6 +769,19 @@
       </div>
     </div>
 
+    <div class="discord-card reveal" id="discordCard">
+      <div class="left">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 12a1.2 1.2 0 1 1 0 .01M15 12a1.2 1.2 0 1 1 0 .01M7 5.5C9 4.5 11 4 12 4s3 .5 5 1.5c1.5 2 2 5.5 2 9.5-1.5 1-3 1.5-3 1.5l-1-1.7c-1 .3-2 .4-3 .4s-2-.1-3-.4L8 16.5c0 0-1.5-.5-3-1.5 0-4 .5-7.5 2-9.5Z"/></svg>
+        </div>
+        <div>
+          <h3 id="discordTitle">Loading Discord status…</h3>
+          <p id="discordSubtitle">&nbsp;</p>
+        </div>
+      </div>
+      <a href="#" id="discordActionBtn" class="btn btn-primary" style="display:none;background:#5865F2;">Connect Discord</a>
+    </div>
+
     <div class="dash-section reveal" id="playbook">
       <div class="dash-section-head">
         <h2>The HUEBLOC Playbook</h2>
@@ -780,7 +808,7 @@
       window.location.href = 'client-area.html?error=session_required';
       return;
     }
-    const { email } = await res.json();
+    const { email, discordConnected, discordUsername } = await res.json();
 
     // Populate the profile card with the real logged-in member.
     const namePart = email.split('@')[0];
@@ -791,11 +819,57 @@
 
     document.body.classList.remove('auth-pending');
     loadPlaybookSummary();
+    renderDiscordCard(discordConnected, discordUsername);
   } catch (err) {
     console.error('Session check failed:', err);
     window.location.href = 'client-area.html?error=session_required';
   }
 })();
+
+// ===== Discord connection card =====
+// Once Craig sets up the Discord app, replace this with the real Client ID
+// from the Discord Developer Portal.
+const DISCORD_CLIENT_ID = 'REPLACE_WITH_DISCORD_CLIENT_ID';
+
+function renderDiscordCard(connected, username) {
+  const title = document.getElementById('discordTitle');
+  const subtitle = document.getElementById('discordSubtitle');
+  const btn = document.getElementById('discordActionBtn');
+
+  if (connected) {
+    title.textContent = 'Discord Connected';
+    title.classList.add('status-connected');
+    subtitle.textContent = username ? `Signed in as ${username}` : 'You have access to the private server.';
+    btn.style.display = 'none';
+  } else {
+    title.textContent = 'Connect Your Discord';
+    subtitle.textContent = 'Link your account to get access to the private HUEBLOC server.';
+    btn.style.display = 'inline-flex';
+    btn.textContent = 'Connect Discord';
+
+    if (DISCORD_CLIENT_ID.includes('REPLACE_WITH')) {
+      btn.href = '#';
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Discord isn\'t connected yet on our end — check back soon!');
+      });
+    } else {
+      const redirectUri = encodeURIComponent(`${window.location.origin}/.netlify/functions/discord-callback`);
+      btn.href = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=identify%20guilds.join`;
+    }
+  }
+
+  // Show a quick confirmation if we just landed back here from the OAuth flow.
+  const params = new URLSearchParams(window.location.search);
+  const discordStatus = params.get('discord');
+  if (discordStatus === 'connected') {
+    subtitle.textContent = 'Successfully connected! Check your Discord — the role should already be applied.';
+  } else if (discordStatus === 'error') {
+    subtitle.textContent = 'Something went wrong connecting Discord. Please try again.';
+  } else if (discordStatus === 'inactive') {
+    subtitle.textContent = 'Your membership needs to be active to connect Discord.';
+  }
+}
 
 // ===== Pull real Playbook progress for the overview cards =====
 async function loadPlaybookSummary() {
