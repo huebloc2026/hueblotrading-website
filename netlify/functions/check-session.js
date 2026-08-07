@@ -36,7 +36,7 @@ exports.handler = async (event) => {
   // since this session cookie was issued up to 7 days ago.
   const { data: member } = await supabase
     .from('members')
-    .select('email, payment_status')
+    .select('email, payment_status, discord_user_id, discord_username')
     .eq('email', email)
     .maybeSingle();
 
@@ -46,6 +46,11 @@ exports.handler = async (event) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ authenticated: true, email: member.email }),
+    body: JSON.stringify({
+      authenticated: true,
+      email: member.email,
+      discordConnected: !!member.discord_user_id,
+      discordUsername: member.discord_username || null,
+    }),
   };
 };

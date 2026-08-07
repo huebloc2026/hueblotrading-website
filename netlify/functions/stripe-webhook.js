@@ -20,6 +20,9 @@
 //   STRIPE_WEBHOOK_SECRET   whsec_...   (shown when you create the endpoint above)
 //   SUPABASE_URL            https://xxxx.supabase.co
 //   SUPABASE_SERVICE_ROLE_KEY  service_role secret (Project Settings → API)
+//   DISCORD_BOT_TOKEN, DISCORD_GUILD_ID, DISCORD_ROLE_ID  (optional — only
+//     needed if Discord role removal on refund/dispute is set up; the
+//     webhook works fine without these, it just skips that step)
 //
 // Dependencies (package.json):
 //   npm install stripe @supabase/supabase-js
@@ -32,6 +35,39 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
+
+// Removes the paid-member Discord role from anyone in the just-updated
+// row(s) who has a connected Discord account. Silently does nothing for
+// members who never connected Discord — this only affects role access,
+// never website/Playbook access, which is handled separately above.
+async function removeDiscordRoleIfConnected(updatedRows) {
+  const discordIds = (updatedRows || [])
+    .map((row) => row.discord_user_id)
+    .filter(Boolean);
+
+  if (!discordIds.length) return;
+  if (!process.env.DISCORD_BOT_TOKEN || !process.env.DISCORD_GUILD_ID || !process.env.DISCORD_ROLE_ID) {
+    // Discord integration not configured yet — nothing to do.
+    return;
+  }
+
+  const guildId = process.env.DISCORD_GUILD_ID;
+  const roleId = process.env.DISCORD_ROLE_ID;
+  const botAuth = `Bot ${process.env.DISCORD_BOT_TOKEN}`;
+
+  for (const discordUserId of discordIds) {
+    try {
+      await fetch(
+        `https://discord.com/api/guilds/${guildId}/members/${discordUserId}/roles/${roleId}`,
+        { method: 'DELETE', headers: { Authorization: botAuth } }
+      );
+    } catch (err) {
+      console.error('Error removing Discord role for', discordUserId, err);
+      // Don't throw — a Discord API hiccup shouldn't fail the whole webhook,
+      // since website access has already been correctly revoked above.
+    }
+  }
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -96,12 +132,14 @@ exports.handler = async (event) => {
           break;
         }
 
-        const { error } = await supabase
+        const { data: updated, error } = await supabase
           .from('members')
           .update({ payment_status: 'refunded' })
-          .eq('stripe_payment_intent_id', paymentIntentId);
+          .eq('stripe_payment_intent_id', paymentIntentId)
+          .select('discord_user_id');
 
         if (error) throw error;
+        await removeDiscordRoleIfConnected(updated);
         break;
       }
 
@@ -119,12 +157,14 @@ exports.handler = async (event) => {
           break;
         }
 
-        const { error } = await supabase
+        const { data: updated, error } = await supabase
           .from('members')
           .update({ payment_status: 'disputed' })
-          .eq('stripe_payment_intent_id', paymentIntentId);
+          .eq('stripe_payment_intent_id', paymentIntentId)
+          .select('discord_user_id');
 
         if (error) throw error;
+        await removeDiscordRoleIfConnected(updated);
         break;
       }
 
