@@ -77,7 +77,15 @@ exports.handler = async (event) => {
       }),
     });
     const tokenData = await tokenRes.json();
-    if (!tokenData.access_token) throw new Error('No access token in Discord response');
+    if (!tokenData.access_token) {
+      // Log exactly what Discord said, and what we sent, so this is
+      // debuggable from the Netlify log instead of guessing blind.
+      console.error('Discord token exchange failed. Status:', tokenRes.status);
+      console.error('Discord response body:', JSON.stringify(tokenData));
+      console.error('redirect_uri sent:', redirectUri);
+      console.error('client_id sent:', process.env.DISCORD_CLIENT_ID);
+      throw new Error('No access token in Discord response');
+    }
     discordAccessToken = tokenData.access_token;
   } catch (err) {
     console.error('Error exchanging Discord code:', err);
